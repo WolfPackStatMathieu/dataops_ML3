@@ -45,7 +45,27 @@ jobs:
 
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'
-        
+
       - name: Check if Compute Instance 'prenoms-api-christophe' exists
         id: check
-        run: echo "INSTANCE_EXISTS=$(gcloud compute instances list | grep prenoms-api-christophe | wc -l | xargs)" >> "$GITHUB_OUTPUT"
+        run: echo "INSTANCE_EXISTS=$(gcloud compute instances list | grep gender-predict-mathieu | wc -l | xargs)" >> "$GITHUB_OUTPUT"
+      
+      - name: Debug check value
+        run: echo '${{ steps.check.outputs.INSTANCE_EXISTS }}'
+
+      - name: Create (for the first time) API to GCP Compute Instance
+        if: steps.check.outputs.INSTANCE_EXISTS == '0'
+        run: |
+          gcloud compute instances create-with-container gender-predict-mathieu \
+            --container-image wolfpackstatmathieu/prenoms:${{ github.sha }} \
+            --tags http-server \
+            --zone us-central1-a \
+            --container-env FLASK_PORT=80
+
+      - name: Update API to GCP Compute Instance
+        if: steps.check.outputs.INSTANCE_EXISTS != '0'
+        run: |
+          gcloud compute instances update-container prenoms-api-christophe \
+            --container-image cblefari/prenoms:${{ github.sha }} \
+            --zone us-central1-a \
+            --container-env FLASK_PORT=80 
