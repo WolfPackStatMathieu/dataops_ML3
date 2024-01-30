@@ -1,0 +1,3 @@
+git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch NOM_DU_FICHIER' --prune-empty --tag-name-filter cat -- --all
+ensai-2024-d39d18623847.json
+__pycache__*

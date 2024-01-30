@@ -1,0 +1,26 @@
+name: Build and deploy prenoms API
+
+# https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Docker build
+        run: docker build -t prenoms ./prenoms
+
+      - name: Docker login
+        run: docker login -u wolfpackstatmathieu -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Docker tag
+        run: docker tag prenoms wolfpackstatmathieu/prenoms:${{ github.sha }}
+
+      - name: Docker push
+        run: docker push wolfpackstatmathieu/prenoms:${{ github.sha }}

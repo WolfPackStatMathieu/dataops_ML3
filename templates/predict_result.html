@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict Result</title>
+</head>
+<body>
+    <h2>Prediction Result</h2>
+    {% if result == 0 %}
+        <p>{{ prenom }} is predicted to be a Man.</p>
+    {% elif result == 1 %}
+        <p>{{ prenom }} is predicted to be a Woman.</p>
+    {% else %}
+        <p>Invalid prediction result.</p>
+    {% endif %}
+    <a href="/predict">Back to Prediction</a>
+</body>
+</html>
