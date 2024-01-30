@@ -42,3 +42,10 @@ jobs:
         uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+        
+      - name: Check if Compute Instance 'prenoms-api-christophe' exists
+        id: check
+        run: echo "INSTANCE_EXISTS=$(gcloud compute instances list | grep prenoms-api-christophe | wc -l | xargs)" >> "$GITHUB_OUTPUT"
